@@ -1,0 +1,35 @@
+name: Python CI - Check Errors
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint_and_test:
+    runs-on: windows-latest  # Use Windows runner
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9  # You can change this version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest  # Installing linters and testing tools
+
+    - name: Run Flake8 Linting
+      run: |
+        flake8 test_script.py  # Lint the Python script for errors
+
+    - name: Run Python Tests
+      run: |
+        pytest test_script.py  # Run tests (will fail due to errors in the script)
